@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:demo_app/widgets/MyHomePage.dart';
+import 'package:demo_app/pages/home/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Splash());
+void main() => runApp(SplashPage());
 
-class Splash extends StatefulWidget {
+class SplashPage extends StatefulWidget {
   @override
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<SplashPage> {
 
 @override
 void initState(){
@@ -24,7 +24,7 @@ void initState(){
     return Timer(duration, (){
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_){
-          return MyHomePage();
+          return HomePage();
         })
       );
     }

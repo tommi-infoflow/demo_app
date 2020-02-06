@@ -1,4 +1,4 @@
-import 'package:demo_app/pages/splash.dart';
+import 'package:demo_app/pages/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Welcome to Flutter',
-      home: Splash(),
+      home: SplashPage(),
     );
   }
 }
