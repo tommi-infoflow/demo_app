@@ -1,9 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 @immutable
-abstract class FavoriteMovieEvent{}
+abstract class FavoriteMovieEvent {}
 
 @immutable
-class FavoriteMovieEventBy extends FavoriteMovieEvent{
-
-}
+class FavoriteMovieEventDashboard extends FavoriteMovieEvent {}

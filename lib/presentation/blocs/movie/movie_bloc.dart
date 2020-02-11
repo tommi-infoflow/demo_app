@@ -7,29 +7,25 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
-  final String title;
-  final String year;
   final SearchMovieUsecase searchMovieUsecase;
 
-  MovieBloc(
-      {@required this.searchMovieUsecase, @required this.title, this.year});
+  MovieBloc({@required this.searchMovieUsecase});
 
   @override
   MovieState get initialState => MovieInitialState();
 
   @override
   Stream<MovieState> mapEventToState(MovieEvent event) async* {
-    yield* _searchMovies(title, year);
-  }
-
-  Stream<MovieState> _searchMovies(String title, String year) async* {
-    yield MovieLoadingState(title: title, year: year);
-    try {
-      Map<String, dynamic> param = {'title': title, 'year': year};
-      final movies = await searchMovieUsecase(param);
-      yield MovieDataState(movies: movies);
-    } catch (e) {
-      MovieErrorState(e);
+    if (event is MovieEventSearch) {
+      try {
+        Map<String, dynamic> param = {'title': event.title, 'year': event.year};
+        final movies = await searchMovieUsecase(param);
+        yield MovieDataState(movies: movies);
+      } catch (e) {
+        yield MovieErrorState(e);
+      }
+    } else if(event is MovieEventInit){
+      yield MovieLoadingState();
     }
   }
 }

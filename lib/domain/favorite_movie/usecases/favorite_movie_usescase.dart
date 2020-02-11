@@ -12,7 +12,7 @@ class GetAllFavoriteMovieUsecase implements UseCase<List<FavoriteMovieEntity>, N
   GetAllFavoriteMovieUsecase({@required this.favoriteMovieRepository});
 
   @override
-  Future<List<FavoriteMovieEntity>> call(NoPayload _payload) {
+  Future<List<FavoriteMovieEntity>> call(NoPayload _) {
     return favoriteMovieRepository.getAllfavoriteMovies();
   }
 }

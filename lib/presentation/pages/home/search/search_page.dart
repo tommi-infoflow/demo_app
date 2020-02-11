@@ -7,31 +7,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchPage extends StatefulWidget {
+  SearchPage({Key key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => SearchPageState();
+  State<StatefulWidget> createState() => _SearchPageState();
 }
 
-class SearchPageState extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage> {
   List<MovieEntity> _movies = [];
-  String _titleSearch = '';
-  String _yearSearch = '';
-  // TextEditingController _searchTitleController;
-  // TextEditingController _searchYearController;
+  TextEditingController _searchTitleController;
+  TextEditingController _searchYearController;
 
   @override
   initState() {
     super.initState();
-    // _searchTitleController = TextEditingController();
-    // _searchYearController = TextEditingController();
+    _searchTitleController = TextEditingController();
+    _searchYearController = TextEditingController();
     BlocProvider.of<MovieBloc>(context).add(MovieEventInit());
   }
 
-  // @override
-  // dispose() {
-  //   _searchTitleController.dispose();
-  //   _searchYearController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  dispose() {
+    _searchTitleController.dispose();
+    _searchYearController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,10 @@ class SearchPageState extends State<SearchPage> {
           if (state is MovieErrorState) {
             _showNetworkErrorDialog();
           } else if (state is MovieLoadingState) {
-            setState(() {
-              _titleSearch = state.title;
-              _yearSearch = state.year;
-            });
+            // setState(() {
+            //   _titleSearch = state.title;
+            //   _yearSearch = state.year;
+            // });
           }
         },
         builder: (context, state) {
@@ -80,7 +80,7 @@ class SearchPageState extends State<SearchPage> {
     return Flexible(
       flex: 5,
       child: TextField(
-        // controller: _searchTitleController,
+        controller: _searchTitleController,
         decoration:
             InputDecoration(border: OutlineInputBorder(), labelText: 'Title'),
       ),
@@ -91,7 +91,7 @@ class SearchPageState extends State<SearchPage> {
     return Flexible(
         flex: 2,
         child: TextField(
-          // controller: _searchYearController,
+          controller: _searchYearController,
           decoration:
               InputDecoration(border: OutlineInputBorder(), labelText: 'Year'),
         ));
@@ -109,7 +109,8 @@ class SearchPageState extends State<SearchPage> {
             color: Colors.blue,
             shape: CircleBorder(),
             onPressed: () {
-              // _getMovies();
+              BlocProvider.of<MovieBloc>(context)
+                  .add(MovieEventSearch(_searchTitleController.text, _searchYearController.text));
             }));
   }
 
@@ -190,8 +191,8 @@ class SearchPageState extends State<SearchPage> {
             FlatButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  BlocProvider.of<MovieBloc>(context).add(MovieEventSearch(
-                      _titleSearch, _yearSearch));
+                  BlocProvider.of<MovieBloc>(context)
+                      .add(MovieEventSearch(_searchTitleController.text, _searchYearController.text));
                 },
                 child: Text('Retry')),
             FlatButton(

@@ -1,7 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:injectable/injectable.dart';
 
+@Bind.toType(MovieEventSearch)
 @immutable
-abstract class MovieEvent{}
+abstract class MovieEvent{
+  
+}
 
 @immutable
 class MovieEventInit extends MovieEvent{}

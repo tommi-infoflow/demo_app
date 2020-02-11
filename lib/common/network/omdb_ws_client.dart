@@ -2,11 +2,16 @@ import 'dart:convert';
 
 import 'package:demo_app/common/errors/omdb_api_error.dart';
 import 'package:http/http.dart';
+import 'package:injectable/injectable.dart';
 
+@Bind.toType(OmdbWsClientImpl)
+@injectable
 abstract class OmdbWsClient extends BaseClient {}
 
 typedef _PendingRequest = Future<Response> Function();
 
+@lazySingleton
+@injectable
 class OmdbWsClientImpl extends OmdbWsClient {
   final Client _client;
 
