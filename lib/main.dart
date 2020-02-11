@@ -1,4 +1,4 @@
-import 'package:demo_app/pages/splash/splash_page.dart';
+import 'package:demo_app/presentation/pages/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Omdb App',
       home: SplashPage(),
     );
   }
