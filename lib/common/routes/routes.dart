@@ -15,6 +15,8 @@ abstract class Routes {
   static const String favoriteList = '$homePath/$favoriteListPath';
   static const String favoriteDetailsPath = 'favoriteDetails';
   static const String favoriteDetails = '$homePath/$favoriteDetailsPath';
+  static const String favoriteDetailsNewPath = 'new';  
+  static const String favoriteDetailsNewMovieParameter = 'movie';
   static const String settingsPath = 'settings';
   static const String settings = '$home/$settingsPath';
 

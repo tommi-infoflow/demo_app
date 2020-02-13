@@ -60,7 +60,7 @@ class FavoriteMovieDatasourceImpl extends FavoriteMovieDatasource {
   Future<void> addFavoriteMovie(Movie movie) async {
     Uri uri = Uri.https(DOMAIN, 'video-ws/videos/');
     final token = await getToken();
-    final _header = {"token": token, "Content-type" : "application/json"};
+    final _header = {"token": token, "Content-type": "application/json"};
     final _body = movie.toJson();
 
     omdbWsClient.post(uri, body: json.encode(_body), headers: _header);
@@ -89,13 +89,15 @@ class FavoriteMovieDatasourceImpl extends FavoriteMovieDatasource {
 
   @override
   Future<void> updateFavoriteMovie(FavoriteMovie movie) async {
-    Uri uri =
-        Uri.https(DOMAIN, 'video-ws/videos/${movie.id}', {'apikey': API_KEY});
-    final token = await getToken();
-    final _header = {'token': token};
-    final _body = movie.toJson();
+    try {
+      Uri uri = Uri.https(DOMAIN, 'video-ws/videos/${movie.id}');
+      final token = await getToken();
+      final _header = {'token': token};
+      final _body = movie.toJson();
 
-    await omdbWsClient.put(uri, headers: _header, body: _body);
+      await omdbWsClient.put(uri, headers: _header, body: jsonEncode(_body));
+    } catch (e) {
+    }
   }
 
   Future<dynamic> getFromSharedPreferences(String key) async {

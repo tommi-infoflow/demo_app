@@ -24,13 +24,11 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState>{
         var result = favoriteMovies.sublist(0, 3);
         yield SearchMovieStateDashboard(favoriteMovies: result);
       }catch (e){
-        print(e);
       }
     } else if (event is SearchMovieAddEvent){ 
       try{
         createFavoriteMovieUsecase(event.movieEntity);
       } catch(e){
-        print(e);
       }
     }
   }

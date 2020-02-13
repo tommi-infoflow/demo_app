@@ -21,6 +21,17 @@ class FavoriteMovieStateDelete extends FavoriteMovieState {
 @immutable
 class FavoriteMovieStateDetail extends FavoriteMovieState {
   final FavoriteMovieEntity favoriteMovie;
+  final bool isCreate;
 
-  FavoriteMovieStateDetail({this.favoriteMovie});
+  FavoriteMovieStateDetail({this.favoriteMovie, this.isCreate});
+}
+
+@immutable
+class FavoriteMovieStateUpdate extends FavoriteMovieState {
+  FavoriteMovieStateUpdate();
+}
+
+@immutable
+class FavoriteMovieStateCreate extends FavoriteMovieState {
+  FavoriteMovieStateCreate();
 }

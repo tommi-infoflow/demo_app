@@ -25,11 +25,11 @@ class FavoriteMovie extends FavoriteMovieEntity{
       id: json['id'],
       title: json['title'],
       year: json['year'],
-      viewed: json['viewed'],
+      viewed: json['viewed'] ?? false,
       poster: json['poster'],
-      priority: json['priority'],
-      rating: json['rating'],
-      timestamp: json['timestamp'],
+      priority: json['priority'] ?? 0,
+      rating: json['rating'] ?? 0,
+      timestamp: json['timestamp'] ?? 0,
       label: json['label']
     );
   }

@@ -39,7 +39,7 @@ class UpdateFavoriteMovieUsecase implements UseCase<void, FavoriteMovieEntity>{
   UpdateFavoriteMovieUsecase({@required this.favoriteMovieRepository});
 
   @override
-  Future<List<FavoriteMovieEntity>> call(FavoriteMovieEntity _payload) {
+  Future<void> call(FavoriteMovieEntity _payload) {
     return favoriteMovieRepository.updateFavoriteMovie(_payload);
   }
 }
@@ -79,6 +79,10 @@ class FavoriteMovieByIdUsecase implements UseCase<FavoriteMovieEntity, String>{
 
   @override
   Future<FavoriteMovieEntity> call(String id) {
-    return favoriteMovieRepository.getAllfavoriteMovieById(id);
+    try{
+      return favoriteMovieRepository.getAllfavoriteMovieById(id);
+    } catch(e){
+      return null;
+    }
   }
 }

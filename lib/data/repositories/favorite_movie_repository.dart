@@ -44,6 +44,10 @@ class FavoriteMovieRepositoryImpl extends FavoriteMovieRepository {
 
   @override
   Future<FavoriteMovieEntity> getAllfavoriteMovieById(String id) async {
-    return await movieDatasource.getFavoriteMovieById(id);
+    try{
+      return await movieDatasource.getFavoriteMovieById(id);
+    } catch(e){
+      return null;
+    }
   }
 }

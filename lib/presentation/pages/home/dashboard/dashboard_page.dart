@@ -34,7 +34,6 @@ class _DashboardPageState extends State<DashboardPage> {
         }
         return Center(child: CircularProgressIndicator());
       }, listener: (context, state) {
-        print('listener state : $state');
       }),
     );
   }
@@ -51,9 +50,6 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Card(
               color: Colors.yellow[100],
               child: InkWell(
-                onTap: () {
-                  print('${_movieList[index].title}');
-                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

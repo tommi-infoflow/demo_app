@@ -17,6 +17,21 @@ class FavoriteMovieDeleteEvent extends FavoriteMovieEvent {
 @immutable
 class FavoriteMovieDetailEvent extends FavoriteMovieEvent {
   final String id;
+  final FavoriteMovieEntity favoriteMovieEntity;
 
-  FavoriteMovieDetailEvent({this.id});
+  FavoriteMovieDetailEvent({this.id, this.favoriteMovieEntity});
+}
+
+@immutable
+class FavoriteMovieUpdateEvent extends FavoriteMovieEvent {
+  final FavoriteMovieEntity favoriteMovieEntity;
+
+  FavoriteMovieUpdateEvent({this.favoriteMovieEntity});
+}
+
+@immutable
+class FavoriteMovieCreateEvent extends FavoriteMovieEvent {
+  final FavoriteMovieEntity favoriteMovieEntity;
+
+  FavoriteMovieCreateEvent({this.favoriteMovieEntity});
 }

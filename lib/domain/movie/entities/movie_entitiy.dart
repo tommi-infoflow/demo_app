@@ -32,4 +32,18 @@ class MovieEntity {
     timestamp: timestamp ?? this.timestamp,
     label: label ?? this.label
   );
+
+    factory MovieEntity.fromJsonDemoApi(Map<String, dynamic> json){
+    return MovieEntity(
+      id: json['id'],
+      title: json['title'],
+      year: json['year'],
+      viewed: json['viewed'],
+      poster: json['poster'],
+      priority: json['priority'],
+      rating: json['rating'],
+      timestamp: json['timestamp'],
+      label: json['label'],
+    );
+  }
 }

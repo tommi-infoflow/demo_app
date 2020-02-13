@@ -57,6 +57,7 @@ void $initGetIt({String environment}) {
           getAllFavoriteMovieUsecase: getIt<GetAllFavoriteMovieUsecase>(),
           deleteFavoriteMovieUsecase: getIt<DeleteFavoriteMovieUsecase>(),
           favoriteMovieByIdUsecase: getIt<FavoriteMovieByIdUsecase>(),
+          updateFavoriteMovieUsecase: getIt<UpdateFavoriteMovieUsecase>(),
         ))
     ..registerFactory<SearchMovieBloc>(() => SearchMovieBloc(getAllFavoriteMovieUsecase: getIt<GetAllFavoriteMovieUsecase>(), createFavoriteMovieUsecase: getIt<CreateFavoriteMovieUsecase>()))
     ..registerFactory<MovieBloc>(() => MovieBloc(searchMovieUsecase: getIt<SearchMovieUsecase>()));

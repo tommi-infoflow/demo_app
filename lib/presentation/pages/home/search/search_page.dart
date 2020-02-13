@@ -1,10 +1,9 @@
+import 'package:demo_app/common/routes/routes.dart';
 import 'package:demo_app/domain/movie/entities/movie_entitiy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'blocs/favorite_movie/search_movie_bloc.dart';
-import 'blocs/favorite_movie/search_movie_event.dart';
 import 'blocs/movie/movie_bloc.dart';
 import 'blocs/movie/movie_event.dart';
 import 'blocs/movie/movie_state.dart';
@@ -175,9 +174,10 @@ class _SearchPageState extends State<SearchPage> {
                           color: Colors.blue,
                           shape: CircleBorder(),
                           onPressed: () {
-                            BlocProvider.of<SearchMovieBloc>(context).add(
-                                SearchMovieAddEvent(movieEntity: movies[index]));
-                            // _addToFavorite(widget.movies[index]);
+                            Navigator.of(context).pushNamed(
+                                Routes.createFavoriteDetails(movies[index]));
+                            // BlocProvider.of<SearchMovieBloc>(context).add(
+                            //     SearchMovieAddEvent(movieEntity: movies[index]));
                           })),
                 ],
               ),

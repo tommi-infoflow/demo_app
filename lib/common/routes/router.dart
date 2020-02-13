@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:demo_app/common/config/injector.dart';
 import 'package:demo_app/common/enum/home_page_enum.dart';
 import 'package:demo_app/common/routes/routes.dart';
+import 'package:demo_app/data/models/favorite_movie.dart';
 import 'package:demo_app/domain/favorite_movie/entities/favorite_movie_entitiy.dart';
 import 'package:demo_app/presentation/pages/home/dashboard/bloc/dashboard_movie_bloc.dart';
 import 'package:demo_app/presentation/pages/home/favorite/blocs/favorite_movie/favorite_movie_bloc.dart';
@@ -36,17 +39,17 @@ abstract class Router {
     final uri = Uri.parse(settings.name);
     final List<String> pathElements = uri.path.split('/');
     if (pathElements[1] == Routes.favoriteDetailsPath) {
-      // if (pathElements[2] == Routes.favoriteDetailsNewPath) {
-      //   final asteroidJson =
-      //       uri.queryParameters[Routes.favoriteDetailsNewAsteroidParameter];
-      //   final asteroidRaw = jsonDecode(asteroidJson);
-      //   final asteroid = FavoriteAsteroid.fromJson(asteroidRaw);
-      //   return _buildFavoriteDetailsRoute(settings, asteroid: asteroid);
-      // } else {
+      if (pathElements[2] == Routes.favoriteDetailsNewPath) {
+        final movieJson =
+            uri.queryParameters[Routes.favoriteDetailsNewMovieParameter];
+        final movieRaw = jsonDecode(movieJson);
+        final movie = FavoriteMovie.fromJsonDemoApi(movieRaw);
+        return _buildFavoriteDetailsRoute(settings, movie: movie);
+      } else {
       final id = pathElements[2];
       return _buildFavoriteDetailsRoute(settings, id: id);
     }
-  // }
+  }
 
     return null;
   }
@@ -114,7 +117,7 @@ abstract class Router {
   }) {
     var initialEvent;
     if (movie != null) {
-      initialEvent = FavoriteMovieDetailEvent(id: movie.id);
+      initialEvent = FavoriteMovieDetailEvent(id: movie.id, favoriteMovieEntity: movie);
     } else {
       initialEvent = FavoriteMovieDetailEvent(id: id);
     }

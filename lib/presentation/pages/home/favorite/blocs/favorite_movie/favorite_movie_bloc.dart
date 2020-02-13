@@ -10,8 +10,9 @@ class FavoriteMovieBloc extends Bloc<FavoriteMovieEvent, FavoriteMovieState> {
   final GetAllFavoriteMovieUsecase getAllFavoriteMovieUsecase;
   final DeleteFavoriteMovieUsecase deleteFavoriteMovieUsecase;
   final FavoriteMovieByIdUsecase favoriteMovieByIdUsecase;
+  final UpdateFavoriteMovieUsecase updateFavoriteMovieUsecase;
 
-  FavoriteMovieBloc({this.getAllFavoriteMovieUsecase, this.deleteFavoriteMovieUsecase, this.favoriteMovieByIdUsecase});
+  FavoriteMovieBloc({this.getAllFavoriteMovieUsecase, this.deleteFavoriteMovieUsecase, this.favoriteMovieByIdUsecase, this.updateFavoriteMovieUsecase});
 
   @override
   FavoriteMovieState get initialState => FavoriteMovieInitialState();
@@ -24,7 +25,6 @@ class FavoriteMovieBloc extends Bloc<FavoriteMovieEvent, FavoriteMovieState> {
         final favoriteMovies = await getAllFavoriteMovieUsecase(NoPayload());
         yield FavoriteMovieStateDelete(favoriteMovies: favoriteMovies);
       } catch (e) {
-        print(e);
       }
     } else if (event is FavoriteMovieInitialEvent){
       try{
@@ -36,11 +36,19 @@ class FavoriteMovieBloc extends Bloc<FavoriteMovieEvent, FavoriteMovieState> {
     } else if(event is FavoriteMovieDetailEvent){
       try{
         final favoriteMovie = await favoriteMovieByIdUsecase(event.id);
-        yield FavoriteMovieStateDetail(favoriteMovie: favoriteMovie);
+        if(favoriteMovie == null){
+          yield FavoriteMovieStateDetail(favoriteMovie: event.favoriteMovieEntity, isCreate: true);
+        } else {
+          yield FavoriteMovieStateDetail(favoriteMovie: favoriteMovie, isCreate: false);
+        }
       }catch(e){
-
       }
-
+    } else if(event is FavoriteMovieUpdateEvent){
+      try{
+        await updateFavoriteMovieUsecase(event.favoriteMovieEntity);
+        yield FavoriteMovieStateUpdate();
+      }catch(e){
+      }
     }
   }
 }

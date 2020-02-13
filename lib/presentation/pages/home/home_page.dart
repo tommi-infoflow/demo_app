@@ -10,13 +10,20 @@ import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
   final HomePageOptions page;
 
-  const HomePage({Key key, this.page = HomePageOptions.dashboard}) : super(key: key);
+  const HomePage({Key key, this.page}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   String _title = 'Dashboard Page';
+  int _selectedPageIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedPageIndex = widget.page?.index ?? 0;
+  }
 
   final List<Widget> _pages = [
     DashboardPage(),
@@ -32,7 +39,6 @@ class _HomePageState extends State<HomePage> {
     'Setting Page',
   ];
 
-  int _selectedPageIndex = 0;
   void _onPageIndexChanged(int value) {
     setState(() {
       _title = _titles[value];

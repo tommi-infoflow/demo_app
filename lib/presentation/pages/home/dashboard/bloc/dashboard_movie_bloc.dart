@@ -23,7 +23,7 @@ class DashboardMovieBloc extends Bloc<DashboarMovieEvent, DashboardMovieState>{
       try{
         final favoriteMovies  = await getAllFavoriteMovieUsecase(NoPayload());
 
-        favoriteMovies.sort((x,y) => x.timestamp.compareTo(y.timestamp));
+        favoriteMovies.sort((x,y) => y.timestamp.compareTo(x.timestamp));
 
         List<FavoriteMovieEntity> dashboardMovies = [];
         if(favoriteMovies.length > 3)
@@ -39,7 +39,6 @@ class DashboardMovieBloc extends Bloc<DashboarMovieEvent, DashboardMovieState>{
         } 
         yield DashboardMovieDataState(dashboardMovies: dashboardMovies);
       }catch (e){
-        print(e);
       }
     } 
   }
