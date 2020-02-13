@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:demo_app/presentation/pages/home/home_page.dart';
 import 'package:demo_app/presentation/pages/login/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +26,18 @@ class _SplashState extends State<SplashPage> {
     var duration = const Duration(seconds: 2);
     return Timer(duration, () {
       if (user == null) {
+        // Navigator.of(context).pushReplacementNamed('/login');
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
           return LoginPage();
         }));
       } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-          return HomePage();
-        }));
+        Navigator.of(context).pushReplacementNamed('/home');
+        // Navigator.of(context).pushReplacementNamed('/login');
+        // runApp(MyApp());
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+        //   return HomePage();
+        //   // return HomePage();
+        // }));
       }
     });
   }

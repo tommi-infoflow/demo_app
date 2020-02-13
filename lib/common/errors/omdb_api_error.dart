@@ -17,6 +17,8 @@ class OmdbApiError extends HttpException{
     var b = StringBuffer()..write('OmdbApiError : ')..write(message);
     if(method != null)
       b..write('method : $method');
+    if(code != null)
+      b..write('method : $code');
     if(body != null)
       b..write(', body : $body');
     if(uri != null)

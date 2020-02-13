@@ -1,4 +1,3 @@
-import 'package:demo_app/presentation/pages/home/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,11 +62,12 @@ class LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         _saveUserToken();
+                        Navigator.of(context).pushReplacementNamed('/home');
 
-                        Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(builder: (_) {
-                          return HomePage();
-                        }));
+                        // Navigator.of(context)
+                        //     .pushReplacement(MaterialPageRoute(builder: (_) {
+                        //   return HomePage();
+                        // }));
                       }
                     }),
               ],

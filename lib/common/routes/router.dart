@@ -1,9 +1,14 @@
 import 'package:demo_app/common/config/injector.dart';
 import 'package:demo_app/common/enum/home_page_enum.dart';
 import 'package:demo_app/common/routes/routes.dart';
-import 'package:demo_app/presentation/blocs/favorite_movie/favorite_movie_bloc.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_bloc.dart';
+import 'package:demo_app/domain/favorite_movie/entities/favorite_movie_entitiy.dart';
+import 'package:demo_app/presentation/pages/home/dashboard/bloc/dashboard_movie_bloc.dart';
+import 'package:demo_app/presentation/pages/home/favorite/blocs/favorite_movie/favorite_movie_bloc.dart';
+import 'package:demo_app/presentation/pages/home/favorite/blocs/favorite_movie/favorite_movie_event.dart';
+import 'package:demo_app/presentation/pages/home/favorite/favorite_detail_page.dart';
 import 'package:demo_app/presentation/pages/home/home_page.dart';
+import 'package:demo_app/presentation/pages/home/search/blocs/favorite_movie/search_movie_bloc.dart';
+import 'package:demo_app/presentation/pages/home/search/blocs/movie/movie_bloc.dart';
 import 'package:demo_app/presentation/pages/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,10 +43,10 @@ abstract class Router {
       //   final asteroid = FavoriteAsteroid.fromJson(asteroidRaw);
       //   return _buildFavoriteDetailsRoute(settings, asteroid: asteroid);
       // } else {
-      //   final id = pathElements[2];
-      //   return _buildFavoriteDetailsRoute(settings, id: id);
-      // }
+      final id = pathElements[2];
+      return _buildFavoriteDetailsRoute(settings, id: id);
     }
+  // }
 
     return null;
   }
@@ -52,6 +57,12 @@ abstract class Router {
         BlocProvider<MovieBloc>(
           create: (BuildContext context) => getIt<MovieBloc>(),
         ),
+        BlocProvider<SearchMovieBloc>(
+          create: (BuildContext context) => getIt<SearchMovieBloc>(),
+        ),
+        BlocProvider<DashboardMovieBloc>(
+          create: (BuildContext context) => getIt<DashboardMovieBloc>(),
+        ),
         BlocProvider<FavoriteMovieBloc>(
           create: (BuildContext context) => getIt<FavoriteMovieBloc>(),
         ),
@@ -60,7 +71,7 @@ abstract class Router {
     );
   }
 
-    static Route _buildSplashRoute(RouteSettings settings) {
+  static Route _buildSplashRoute(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (context) => SplashPage(),
     );
@@ -96,7 +107,6 @@ abstract class Router {
     );
   }
 
-/*
   static Route _buildFavoriteDetailsRoute(
     RouteSettings settings, {
     String id,
@@ -104,17 +114,15 @@ abstract class Router {
   }) {
     var initialEvent;
     if (movie != null) {
-      // initialEvent = FavoriteAsteroidDetailsSetEvent(movie);
+      initialEvent = FavoriteMovieDetailEvent(id: movie.id);
     } else {
-      int idInt = int.parse(id);
-      // initialEvent = FavoriteAsteroidDetailsGetByIdEvent(idInt);
+      initialEvent = FavoriteMovieDetailEvent(id: id);
     }
     return MaterialPageRoute(
       builder: (context) => BlocProvider(
           create: (BuildContext context) =>
-              getIt<FavoriteM>()..add(initialEvent),
-          child: FavoriteAsteroidDetailsPage()),
+              getIt<FavoriteMovieBloc>()..add(initialEvent),
+          child: FavoriteDetailPage()),
     );
   }
-  */
 }

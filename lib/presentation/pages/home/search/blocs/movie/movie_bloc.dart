@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:demo_app/domain/movie/usecases/movie_usescase.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_event.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_state.dart';
+import 'package:demo_app/presentation/pages/home/search/blocs/movie/movie_event.dart';
+import 'package:demo_app/presentation/pages/home/search/blocs/movie/movie_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 

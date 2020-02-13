@@ -10,14 +10,21 @@ import 'package:http/http.dart' as http;
 abstract class NetworkClient {
   Future<ResponseData> get(String url, {Map<String, String> headers});
 
-  Future<ResponseData> post(String url, {Map<String, String> header, body, Encoding encoding});
+  Future<ResponseData> post(String url,
+      {Map<String, String> headers, body, Encoding encoding});
+  
 
-  Future<ResponseData> put(String url, {Map<String, String> header, body, Encoding encoding});
+  Future<ResponseData> put(String url,
+      {Map<String, String> header, body, Encoding encoding});
 
   Future<ResponseData> delete(String url, {Map<String, String> header});
 
-  Future<http.Response> postMultipart(String url, 
-    {Map<String, String> headers, Map<String, String> body, String fileField, File file, Encoding encoding});
+  Future<http.Response> postMultipart(String url,
+      {Map<String, String> headers,
+      Map<String, String> body,
+      String fileField,
+      File file,
+      Encoding encoding});
 }
 
 class NetworkClientImpl extends NetworkClient {
@@ -29,87 +36,109 @@ class NetworkClientImpl extends NetworkClient {
   @override
   Future<ResponseData> get(String url, {Map<String, String> headers}) async {
     final uri = Uri.encodeFull(url);
-    final request = () async =>
-      client.get(uri, headers: await _addServiceHeaders(headers));
-    return _handleResponse(httpResponse: await request(), request: request, url: url);
+    final request =
+        () async => client.get(uri, headers: await _addServiceHeaders(headers));
+    return _handleResponse(
+        httpResponse: await request(), request: request, url: url);
   }
 
   @override
-  Future<ResponseData> post(String url, {Map<String, String> header, body, Encoding encoding}) async {
-    final request = () async =>
-      client.post(Uri.encodeFull(url), headers: await _addServiceHeaders(header), body: body, encoding: encoding);
-    return _handleResponse(httpResponse: await request(), request: request, url: url, requestBody: body);
+  Future<ResponseData> post(String url,
+      {Map<String, String> headers, body, Encoding encoding}) async {
+    final request = () async => client.post(Uri.encodeFull(url),
+        headers: await _addServiceHeaders(headers),
+        body: body,
+        encoding: encoding);
+    return _handleResponse(
+      request: request,
+      url: url,
+      httpResponse: await request(),
+      requestBody: body,
+    );
   }
 
   @override
   Future<ResponseData> delete(String url, {Map<String, String> header}) async {
-    final request = () async => client.delete(Uri.encodeFull(url), headers: await _addServiceHeaders(header));
-    return _handleResponse(httpResponse: await request(), request: request, url: url);
+    final request = () async => client.delete(Uri.encodeFull(url),
+        headers: await _addServiceHeaders(header));
+    return _handleResponse(
+        httpResponse: await request(), request: request, url: url);
   }
 
   @override
-  Future<http.Response> postMultipart(String url, {Map<String, String> headers, Map<String, String> body, String fileField, File file, Encoding encoding}) {
+  Future<http.Response> postMultipart(String url,
+      {Map<String, String> headers,
+      Map<String, String> body,
+      String fileField,
+      File file,
+      Encoding encoding}) {
     return null;
   }
 
   @override
-  Future<ResponseData> put(String url, {Map<String, String> header, body, Encoding encoding}) async{
-    final request = () async => client.put(Uri.encodeFull(url), headers: header, body: body, encoding:  encoding);
-    return _handleResponse(httpResponse: await request(), request: request, url: url, requestBody: body);
+  Future<ResponseData> put(String url,
+      {Map<String, String> header, body, Encoding encoding}) async {
+    final request = () async => client.put(Uri.encodeFull(url),
+        headers: header, body: body, encoding: encoding);
+    return _handleResponse(
+        httpResponse: await request(),
+        request: request,
+        url: url,
+        requestBody: body);
   }
-  
+
   Future<String> _getAuthorizationToken() async {
     return (await sessionManager.getSession())?.token ?? '';
   }
 
-  Future<Map<String, String>> _addServiceHeaders(Map<String, String> headers) async {
+  Future<Map<String, String>> _addServiceHeaders(
+      Map<String, String> headers) async {
     final String token = await _getAuthorizationToken();
     final Map<String, String> resultHeaders = Map();
-    if(token != null)
-      resultHeaders[HttpHeaders.authorizationHeader] = token;
-    if(headers != null)
-      resultHeaders.addAll(headers);
+    if (token != null) resultHeaders[HttpHeaders.authorizationHeader] = token;
+    if (headers != null) resultHeaders.addAll(headers);
     return resultHeaders;
   }
 
-  bool _isTokenInvalid(http.Response httpResponse){
-    if(httpResponse.statusCode == 401){
+  bool _isTokenInvalid(http.Response httpResponse) {
+    if (httpResponse.statusCode == 401) {
       return true;
     } else {
       return false;
     }
   }
 
-  ResponseData _handleResponse({
-    @required http.Response httpResponse, 
-    @required final request,
-    String url,
-    final requestBody
-  }){
-    if(httpResponse.statusCode >= 200 && httpResponse.statusCode < 300){
-      final ResponseData res = ResponseData.fromJson(json.decode(httpResponse.body));
-      if(res?.data != null){
-          final bool hasError = res.error != null;
-          if(!hasError){
-              return res;
-          } else {
-            if(!_isTokenInvalid(httpResponse)){
-              throw ApiError(
-                message: res.error?.message ?? '',
-                uri: Uri.parse(url),
-                responseError: res.error,
-                code: httpResponse.statusCode,
-              );
-            }
+  ResponseData _handleResponse(
+      {@required http.Response httpResponse,
+      @required final request,
+      String url,
+      final requestBody}) {
+    if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
+      final ResponseData res =
+          ResponseData.fromJson(json.decode(httpResponse.body));
+      if (res?.data != null) {
+        final bool hasError = res.error != null;
+        if (!hasError) {
+          return res;
+        } else {
+          if (!_isTokenInvalid(httpResponse)) {
+            throw ApiError(
+              message: res.error?.message ?? '',
+              uri: Uri.parse(url),
+              responseError: res.error,
+              code: httpResponse.statusCode,
+            );
           }
+        }
       }
     }
 
-    if(httpResponse.statusCode >= 400 && httpResponse.statusCode < 500){
-      final ResponseData res = ResponseData.fromJson(json.decode(httpResponse.body));
-      if(!_isTokenInvalid(httpResponse)){
+    if (httpResponse.statusCode >= 400 && httpResponse.statusCode < 500) {
+      final ResponseData res =
+          ResponseData.fromJson(json.decode(httpResponse.body));
+      if (!_isTokenInvalid(httpResponse)) {
         final error = res?.error;
-        if(error != null){
+        if (error != null) {
           throw ApiError(
             message: res.error?.message ?? '',
             uri: Uri.parse(url),

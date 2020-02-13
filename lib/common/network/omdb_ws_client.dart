@@ -30,14 +30,15 @@ class OmdbWsClientImpl extends OmdbWsClient {
   @override
   Future<Response> post(url,
       {Map<String, dynamic> headers, body, Encoding encoding}) {
+        print('url : $url, headers : $headers, body : $body');
     return _handleResponse(() =>
         super.post(url, headers: headers, body: body, encoding: encoding));
   }
 
   Future<Response> _handleResponse(_PendingRequest request) async {
-    Response response = await request();
-    if (response.statusCode >= 200 && response.statusCode < 300)
-      return response;
+      Response response = await request();
+      if (response.statusCode >= 200 && response.statusCode < 300)
+        return response;
 
     throw OmdbApiError(
       uri: response.request.url,

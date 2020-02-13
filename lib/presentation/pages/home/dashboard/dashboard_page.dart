@@ -1,10 +1,11 @@
 import 'package:demo_app/domain/favorite_movie/entities/favorite_movie_entitiy.dart';
-import 'package:demo_app/presentation/blocs/favorite_movie/favorite_movie_bloc.dart';
-import 'package:demo_app/presentation/blocs/favorite_movie/favorite_movie_event.dart';
-import 'package:demo_app/presentation/blocs/favorite_movie/favorite_movie_state.dart';
+import 'package:demo_app/presentation/pages/home/dashboard/bloc/dashboard_movie_event.dart';
+import 'package:demo_app/presentation/pages/home/dashboard/bloc/dashboard_movie_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/dashboard_movie_bloc.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -18,30 +19,30 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   initState() {
-    // super.initState();
-    BlocProvider.of<FavoriteMovieBloc>(context)
-        .add(FavoriteMovieEventDashboard());
+    super.initState();
+    BlocProvider.of<DashboardMovieBloc>(context).add(DashboarMovieDataEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: BlocConsumer<FavoriteMovieBloc, FavoriteMovieState>(
+      child: BlocConsumer<DashboardMovieBloc, DashboardMovieState>(
           builder: (context, state) {
-            print('builder state : $state');
-            if(state is FavoriteMovieStateDashboard){
-              _movieList = state.favoriteMovies;
-              return _buildListDashboard();
-            } else if (state is FavoriteMovieInitialState){              
-              return Container();
-            }
-          }, listener: (context, state) {
-            print('listener state : $state');
-          }),
+        if (state is DashboardMovieDataState) {
+          _movieList = state.dashboardMovies;
+          return _buildListDashboard();
+        }
+        return Center(child: CircularProgressIndicator());
+      }, listener: (context, state) {
+        print('listener state : $state');
+      }),
     );
   }
 
   Widget _buildListDashboard() {
+    if (_movieList == null) {
+      return Center(child: Text('Movie Not Found'));
+    }
     return ListView.builder(
         itemCount: _movieList.length,
         itemBuilder: (BuildContext context, int index) {
@@ -57,7 +58,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Image.network(_movieList[index].poster),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                      child: Image.network(_movieList[index].poster,
+                          fit: BoxFit.fitWidth),
+                    ),
                     ListTile(
                       title: Text(
                         _movieList[index].title,

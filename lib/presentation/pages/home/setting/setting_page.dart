@@ -8,6 +8,19 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  @override
+  initState() {
+    super.initState();
+    isShow();
+  }
+
+  isShow() async {
+    final _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isChecked = _prefs.getBool('showRecomended');
+    });
+  }
+
   bool _isChecked = false;
   _toggleCheckbox(value) async {
     final _prefs = await SharedPreferences.getInstance();
@@ -36,28 +49,36 @@ class _SettingPageState extends State<SettingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(child: Text('Show Recommended')),
-                  Checkbox(
-                      value: _isChecked,
-                      onChanged: (value) {
-                        _toggleCheckbox(value);
-                      }),
-                ],
-              ),
+              _buildRecommend(),
               Padding(padding: EdgeInsets.symmetric(vertical: 8.0)),
-              RaisedButton(
-                color: Colors.blue,
-                child: Text('Logout'),
-                onPressed: () {
-                  _logout();
-                },
-              ),
+              _buildButtonLogout(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildRecommend() {
+    return Row(
+      children: <Widget>[
+        Expanded(child: Text('Show Recommended')),
+        Checkbox(
+            value: _isChecked,
+            onChanged: (value) {
+              _toggleCheckbox(value);
+            }),
+      ],
+    );
+  }
+
+  Widget _buildButtonLogout() {
+    return RaisedButton(
+      color: Colors.blue,
+      child: Text('Logout'),
+      onPressed: () {
+        _logout();
+      },
     );
   }
 }

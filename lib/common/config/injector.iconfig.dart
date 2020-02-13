@@ -14,9 +14,10 @@ import 'package:demo_app/domain/favorite_movie/repositories/favorite_movie_repos
 import 'package:demo_app/domain/favorite_movie/usecases/favorite_movie_usescase.dart';
 import 'package:demo_app/domain/movie/repositories/movie_repository.dart';
 import 'package:demo_app/domain/movie/usecases/movie_usescase.dart';
-import 'package:demo_app/presentation/blocs/favorite_movie/favorite_movie_bloc.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_bloc.dart';
-import 'package:demo_app/presentation/blocs/preferences/preferences_bloc.dart';
+import 'package:demo_app/presentation/pages/home/dashboard/bloc/dashboard_movie_bloc.dart';
+import 'package:demo_app/presentation/pages/home/favorite/blocs/favorite_movie/favorite_movie_bloc.dart';
+import 'package:demo_app/presentation/pages/home/search/blocs/favorite_movie/search_movie_bloc.dart';
+import 'package:demo_app/presentation/pages/home/search/blocs/movie/movie_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -47,9 +48,16 @@ void $initGetIt({String environment}) {
     ..registerLazySingleton<UpdateFavoriteMovieUsecase>(
         () => UpdateFavoriteMovieUsecase(favoriteMovieRepository: getIt<FavoriteMovieRepository>()))
     ..registerLazySingleton<DeleteFavoriteMovieUsecase>(() => DeleteFavoriteMovieUsecase(favoriteMovieRepository: getIt<FavoriteMovieRepository>()))
+    ..registerLazySingleton<GetRecommendedMovieUsecase>(() => GetRecommendedMovieUsecase(recommendedMovieRepository: getIt<FavoriteMovieRepository>()))
+    ..registerLazySingleton<FavoriteMovieByIdUsecase>(() => FavoriteMovieByIdUsecase(favoriteMovieRepository: getIt<FavoriteMovieRepository>()))
     ..registerFactory<MovieRepository>(() => MovieRepositoryImpl(getIt<MovieDatasource>()))
     ..registerLazySingleton<SearchMovieUsecase>(() => SearchMovieUsecase(movieRepository: getIt<MovieRepository>()))
-    ..registerFactory<FavoriteMovieBloc>(() => FavoriteMovieBloc(getAllFavoriteMovieUsecase: getIt<GetAllFavoriteMovieUsecase>()))
-    ..registerFactory<MovieBloc>(() => MovieBloc(searchMovieUsecase: getIt<SearchMovieUsecase>()))
-    ..registerFactory<PreferencesBloc>(() => PreferencesBloc());
+    ..registerFactory<DashboardMovieBloc>(() => DashboardMovieBloc(getRecommendedMovieUsecase: getIt<GetRecommendedMovieUsecase>(), getAllFavoriteMovieUsecase: getIt<GetAllFavoriteMovieUsecase>()))
+    ..registerFactory<FavoriteMovieBloc>(() => FavoriteMovieBloc(
+          getAllFavoriteMovieUsecase: getIt<GetAllFavoriteMovieUsecase>(),
+          deleteFavoriteMovieUsecase: getIt<DeleteFavoriteMovieUsecase>(),
+          favoriteMovieByIdUsecase: getIt<FavoriteMovieByIdUsecase>(),
+        ))
+    ..registerFactory<SearchMovieBloc>(() => SearchMovieBloc(getAllFavoriteMovieUsecase: getIt<GetAllFavoriteMovieUsecase>(), createFavoriteMovieUsecase: getIt<CreateFavoriteMovieUsecase>()))
+    ..registerFactory<MovieBloc>(() => MovieBloc(searchMovieUsecase: getIt<SearchMovieUsecase>()));
 }

@@ -1,10 +1,13 @@
 import 'package:demo_app/domain/movie/entities/movie_entitiy.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_bloc.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_event.dart';
-import 'package:demo_app/presentation/blocs/movie/movie_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'blocs/favorite_movie/search_movie_bloc.dart';
+import 'blocs/favorite_movie/search_movie_event.dart';
+import 'blocs/movie/movie_bloc.dart';
+import 'blocs/movie/movie_event.dart';
+import 'blocs/movie/movie_state.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -109,8 +112,8 @@ class _SearchPageState extends State<SearchPage> {
             color: Colors.blue,
             shape: CircleBorder(),
             onPressed: () {
-              BlocProvider.of<MovieBloc>(context)
-                  .add(MovieEventSearch(_searchTitleController.text, _searchYearController.text));
+              BlocProvider.of<MovieBloc>(context).add(MovieEventSearch(
+                  _searchTitleController.text, _searchYearController.text));
             }));
   }
 
@@ -172,6 +175,8 @@ class _SearchPageState extends State<SearchPage> {
                           color: Colors.blue,
                           shape: CircleBorder(),
                           onPressed: () {
+                            BlocProvider.of<SearchMovieBloc>(context).add(
+                                SearchMovieAddEvent(movieEntity: movies[index]));
                             // _addToFavorite(widget.movies[index]);
                           })),
                 ],
@@ -191,8 +196,8 @@ class _SearchPageState extends State<SearchPage> {
             FlatButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  BlocProvider.of<MovieBloc>(context)
-                      .add(MovieEventSearch(_searchTitleController.text, _searchYearController.text));
+                  BlocProvider.of<MovieBloc>(context).add(MovieEventSearch(
+                      _searchTitleController.text, _searchYearController.text));
                 },
                 child: Text('Retry')),
             FlatButton(
